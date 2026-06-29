@@ -1,5 +1,7 @@
 package com.tasktracker.app.web.rest;
 
+import com.tasktracker.app.domain.Task;
+import com.tasktracker.app.domain.enumeration.Status;
 import com.tasktracker.app.repository.TaskRepository;
 import com.tasktracker.app.service.TaskService;
 import com.tasktracker.app.service.dto.TaskDTO;
@@ -51,7 +53,9 @@ public class TaskResource {
      * {@code POST  /tasks} : Create a new task.
      *
      * @param taskDTO the taskDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new taskDTO, or with status {@code 400 (Bad Request)} if the task has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new taskDTO, or with status {@code 400 (Bad Request)} if the
+     *         task has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
@@ -69,11 +73,13 @@ public class TaskResource {
     /**
      * {@code PUT  /tasks/:id} : Updates an existing task.
      *
-     * @param id the id of the taskDTO to save.
+     * @param id      the id of the taskDTO to save.
      * @param taskDTO the taskDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated taskDTO,
-     * or with status {@code 400 (Bad Request)} if the taskDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the taskDTO couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated taskDTO,
+     *         or with status {@code 400 (Bad Request)} if the taskDTO is not valid,
+     *         or with status {@code 500 (Internal Server Error)} if the taskDTO
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
@@ -100,14 +106,17 @@ public class TaskResource {
     }
 
     /**
-     * {@code PATCH  /tasks/:id} : Partial updates given fields of an existing task, field will ignore if it is null
+     * {@code PATCH  /tasks/:id} : Partial updates given fields of an existing task,
+     * field will ignore if it is null
      *
-     * @param id the id of the taskDTO to save.
+     * @param id      the id of the taskDTO to save.
      * @param taskDTO the taskDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated taskDTO,
-     * or with status {@code 400 (Bad Request)} if the taskDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the taskDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the taskDTO couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated taskDTO,
+     *         or with status {@code 400 (Bad Request)} if the taskDTO is not valid,
+     *         or with status {@code 404 (Not Found)} if the taskDTO is not found,
+     *         or with status {@code 500 (Internal Server Error)} if the taskDTO
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -138,9 +147,11 @@ public class TaskResource {
     /**
      * {@code GET  /tasks} : get all the Tasks.
      *
-     * @param pageable the pagination information.
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Tasks in body.
+     * @param pageable  the pagination information.
+     * @param eagerload flag to eager load entities from relationships (This is
+     *                  applicable for many-to-many).
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of Tasks in body.
      */
     @GetMapping("")
     public ResponseEntity<List<TaskDTO>> getAllTasks(
@@ -162,7 +173,8 @@ public class TaskResource {
      * {@code GET  /tasks/:id} : get the "id" task.
      *
      * @param id the id of the taskDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the taskDTO, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the taskDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     public ResponseEntity<TaskDTO> getTask(@PathVariable("id") Long id) {
@@ -184,5 +196,12 @@ public class TaskResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Task>> getTasksByStatus(@PathVariable("status") Status status) {
+        List<Task> tasks = taskService.findAllByStatus(status);
+
+        return ResponseEntity.ok(tasks);
     }
 }

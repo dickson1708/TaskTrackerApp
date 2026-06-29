@@ -1,6 +1,9 @@
 package com.tasktracker.app.service;
 
+import com.tasktracker.app.domain.Task;
+import com.tasktracker.app.domain.enumeration.Status;
 import com.tasktracker.app.service.dto.TaskDTO;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,4 +66,10 @@ public interface TaskService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * Find tasks by status
+     * @param status the status of the entity
+     */
+    List<Task> findAllByStatus(Status status);
 }

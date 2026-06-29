@@ -1,10 +1,12 @@
 package com.tasktracker.app.service.impl;
 
 import com.tasktracker.app.domain.Task;
+import com.tasktracker.app.domain.enumeration.Status;
 import com.tasktracker.app.repository.TaskRepository;
 import com.tasktracker.app.service.TaskService;
 import com.tasktracker.app.service.dto.TaskDTO;
 import com.tasktracker.app.service.mapper.TaskMapper;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,5 +86,10 @@ public class TaskServiceImpl implements TaskService {
     public void delete(Long id) {
         LOG.debug("Request to delete Task : {}", id);
         taskRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Task> findAllByStatus(Status status) {
+        return taskRepository.findAllByStatus(status);
     }
 }

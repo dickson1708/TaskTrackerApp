@@ -1,82 +1,122 @@
-<div class="row">
-  <div class="col-md-3">
-    <span class="hipster img-fluid rounded"></span>
-  </div>
+<div class="container py-5">
+  @if (account() !== null) {
+    @if (account(); as accountRef) {
+      <div class="hero-card shadow-sm">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+          <div>
+            <h1 class="display-5 fw-bold mb-2">👋 Hola, {{ accountRef.login }}</h1>
 
-  <div class="col-md-9">
-    <h1 class="display-4"><span jhiTranslate="home.title">¡Bienvenido, Java Hipster!</span> (Task Tracker App)</h1>
+            <p class="text-muted mb-0">Bienvenido de nuevo a tu Task Tracker.</p>
+          </div>
 
-    <p class="lead" jhiTranslate="home.subtitle">Esta es su página de inicio</p>
-
-    <div>
-      @if (account() !== null) {
-        <div class="alert alert-success">
-          @if (account(); as accountRef) {
-            <span id="home-logged-message" jhiTranslate="home.logged.message" [translateValues]="{ username: accountRef.login }"
-              >Está conectado como &quot;{{ accountRef.login }}&quot;.</span
-            >
-          }
+          <button class="btn btn-primary btn-lg mt-3 mt-md-0">+ Nueva tarea</button>
         </div>
-      } @else {
-        <div class="alert alert-warning">
-          <span jhiTranslate="global.messages.info.authenticated.prefix">Si desea </span>
-          <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">iniciar sesión</a
-          ><span jhiTranslate="global.messages.info.authenticated.suffix"
-            >, puede intentar con las cuentas predeterminadas:<br />- Administrador (usuario=&quot;admin&quot; y
-            contraseña=&quot;admin&quot;) <br />- Usuario (usuario=&quot;user&quot; y contraseña=&quot;user&quot;).</span
-          >
+      </div>
+
+      <div class="row mt-4 g-4">
+        <div class="col-md-3">
+          <div class="stat-card">
+            <h2>{{ totalTasks() }}</h2>
+            <span>Total tareas</span>
+          </div>
         </div>
 
-        <div class="alert alert-warning">
-          <span jhiTranslate="global.messages.info.register.noaccount">¿Aún no tienes una cuenta?</span>&nbsp;
-          <a class="alert-link" routerLink="/account/register" jhiTranslate="global.messages.info.register.link">Crea una cuenta</a>
+        <div class="col-md-3">
+          <div class="stat-card warning">
+            <h2>{{ pendingTasks() }}</h2>
+            <span>Pendientes</span>
+          </div>
         </div>
-      }
+
+        <div class="col-md-3">
+          <div class="stat-card info">
+            <h2>{{ progressTasks() }}</h2>
+            <span>En progreso</span>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="stat-card success">
+            <h2>{{ doneTasks() }}</h2>
+            <span>Completadas</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tasks-section mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+          <div>
+            <h3 class="mb-1">🚀 Tus tareas recientes</h3>
+
+            <p class="text-muted mb-0">Gestiona tus pendientes y sigue avanzando.</p>
+          </div>
+
+          <button class="btn btn-primary">+ Nueva tarea</button>
+        </div>
+
+        @if (tasks().length === 0) {
+          <div class="empty-state">
+            <h5>No tienes tareas todavía</h5>
+
+            <p class="text-muted">Crea tu primera tarea para comenzar.</p>
+          </div>
+        } @else {
+          <div class="row g-4">
+            @for (task of tasks(); track task.id) {
+              <div class="col-md-6 col-xl-4">
+                <div class="task-card">
+                  <div class="task-header">
+                    <h5>
+                      {{ task.title }}
+                    </h5>
+
+                    <span
+                      class="status-badge"
+                      [class.todo]="task.status === 'TODO'"
+                      [class.progress]="task.status === 'INPROGRESS'"
+                      [class.done]="task.status === 'DONE'"
+                    >
+                      {{ task.status }}
+                    </span>
+                  </div>
+
+                  <p class="text-muted">
+                    {{ task.description || 'Sin descripción' }}
+                  </p>
+
+                  <div class="task-footer">
+                    <small> 📅 {{ task.createdAt?.format('DD/MM/YYYY') }} </small>
+
+                    <a class="btn btn-sm btn-outline-primary" [routerLink]="['/task', task.id, 'view']"> Ver </a>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <button class="btn btn-outline-primary" (click)="toggleTasks()">
+              @if (showAllTasks()) {
+                Mostrar menos
+              } @else {
+                Ver todas las tareas
+              }
+            </button>
+          </div>
+        }
+      </div>
+    }
+  } @else {
+    <div class="login-card">
+      <h1>Task Tracker</h1>
+
+      <p class="text-muted">Organiza tu trabajo de forma sencilla y eficiente.</p>
+
+      <button class="btn btn-primary mt-3" (click)="login()">Iniciar sesión</button>
+
+      <div class="mt-4">
+        ¿No tienes cuenta?
+
+        <a routerLink="/account/register"> Regístrate </a>
+      </div>
     </div>
-
-    <p jhiTranslate="home.question">Si tiene preguntas sobre JHipster:</p>
-
-    <ul>
-      <li>
-        <a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.homepage"
-          >Página de inicio de JHipster</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://stackoverflow.com/tags/jhipster/info"
-          target="_blank"
-          rel="noopener noreferrer"
-          jhiTranslate="home.link.stackoverflow"
-          >JHipster en Stack Overflow</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/jhipster/generator-jhipster/issues?state=open"
-          target="_blank"
-          rel="noopener noreferrer"
-          jhiTranslate="home.link.bugtracker"
-          >JHipster seguimiento de errores</a
-        >
-      </li>
-      <li>
-        <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.chat"
-          >Sala de chat pública de JHipster</a
-        >
-      </li>
-      <li>
-        <a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.follow"
-          >contacto &#64;jhipster en Twitter</a
-        >
-      </li>
-    </ul>
-
-    <p>
-      <span jhiTranslate="home.like">Si te gusta JHipster, danos una estrella en</span>
-      <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.github"
-        >GitHub</a
-      >!
-    </p>
-  </div>
+  }
 </div>

@@ -1,6 +1,7 @@
 package com.tasktracker.app.repository;
 
 import com.tasktracker.app.domain.Task;
+import com.tasktracker.app.domain.enumeration.Status;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -37,4 +38,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query("select task from Task task left join fetch task.user where task.id =:id")
     Optional<Task> findOneWithToOneRelationships(@Param("id") Long id);
+
+    List<Task> findAllByStatus(Status status);
 }

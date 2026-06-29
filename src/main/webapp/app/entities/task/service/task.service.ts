@@ -129,4 +129,8 @@ export class TaskService extends TasksService {
   protected convertResponseArrayFromServer(res: RestTask[]): ITask[] {
     return res.map(item => this.convertValueFromServer(item));
   }
+
+  findByStatus(status: string): Observable<ITask[]> {
+    return this.http.get<ITask[]>(`${this.resourceUrl}/status/${status}`);
+  }
 }
