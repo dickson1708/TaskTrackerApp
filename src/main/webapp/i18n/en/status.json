@@ -1,0 +1,10 @@
+{
+  "taskTrackerApp": {
+    "Status": {
+      "null": "",
+      "TODO": "TODO",
+      "INPROGRESS": "INPROGRESS",
+      "DONE": "DONE"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (task(); as taskRef) {
+      <div>
+        <h2 data-cy="taskDetailsHeading"><span jhiTranslate="taskTrackerApp.task.detail.title">Task</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ taskRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="taskTrackerApp.task.taskId">Task Id</span></dt>
+          <dd>
+            <span>{{ taskRef.taskId }}</span>
+          </dd>
+          <dt><span jhiTranslate="taskTrackerApp.task.title">Title</span></dt>
+          <dd>
+            <span>{{ taskRef.title }}</span>
+          </dd>
+          <dt><span jhiTranslate="taskTrackerApp.task.description">Description</span></dt>
+          <dd>
+            <span>{{ taskRef.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="taskTrackerApp.task.status">Status</span></dt>
+          <dd>
+            <span [jhiTranslate]="'taskTrackerApp.Status.' + (taskRef.status ?? 'null')">{{
+              { null: '', TODO: 'TODO', INPROGRESS: 'INPROGRESS', DONE: 'DONE' }[taskRef.status ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="taskTrackerApp.task.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ taskRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="taskTrackerApp.task.user">User</span></dt>
+          <dd>
+            <span>{{ taskRef.user?.login }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Volver</span>
+        </button>
+
+        <button type="button" [routerLink]="['/task', taskRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

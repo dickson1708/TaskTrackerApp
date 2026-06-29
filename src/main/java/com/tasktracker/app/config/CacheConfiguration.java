@@ -35,6 +35,7 @@ public class CacheConfiguration {
             createCache(cm, com.tasktracker.app.repository.UserRepository.USERS_BY_LOGIN_CACHE);
             createCache(cm, com.tasktracker.app.repository.UserRepository.USERS_BY_EMAIL_CACHE);
             createCache(cm, com.tasktracker.app.domain.Authority.class.getName());
+            createCache(cm, com.tasktracker.app.domain.Task.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
